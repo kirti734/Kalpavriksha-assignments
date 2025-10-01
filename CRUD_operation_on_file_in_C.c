@@ -1,60 +1,57 @@
 #include<stdio.h>
-struct user
+void create() 
 {
-    int id;
-    char name[50];
-    int age;
-};
-
-void create(){
     FILE *fp;
-    struct user u;
-    fp=fopen("users.txt","a");  
-    if(fp==NULL)
+    int id,age;
+    char name[50];
+    fp=fopen("users.txt","a");
+    
+    if(fp==NULL) 
     {
         printf("File error!\n");
         return;
     }
 
     printf("Enter ID: ");
-    scanf("%d",&u.id);
+    scanf("%d",&id);
     printf("Enter Name: ");
-    scanf(" %s",u.name);
+    scanf("%s",name);
     printf("Enter Age: ");
-    scanf("%d",&u.age);
+    scanf("%d",&age);
 
-    fprintf(fp,"%d %s %d\n",u.id,u.name,u.age);
+    fprintf(fp,"%d %s %d\n",id,name,age);
     fclose(fp);
     printf("User added.\n");
-    
 }
 
-void read()
+void read() 
 {
     FILE *fp;
-    struct user u;
-    fp=fopen("users.txt","r");  
-    if(fp==NULL)
+    int id,age;
+    char name[50];
+    fp=fopen("users.txt", "r");
+    
+    if(fp==NULL) 
     {
         printf("No records found.\n");
         return;
     }
 
     printf("ID\tName\tAge\n");
-    while(fscanf(fp,"%d %s %d",&u.id,u.name,&u.age)!=EOF)
-    printf("%d\t%s\t%d\n",u.id,u.name,u.age);
-
+    while(fscanf(fp,"%d %s %d",&id,name,&age)!=EOF)
+    printf("%d\t%s\t%d\n", id, name, age);
+    
     fclose(fp);
 }
 
-void update()
+void update() 
 {
     FILE *fp,*temp;
-    struct user u;
-    int id;
+    int id,age,updateid;
+    char name[50];
 
     fp=fopen("users.txt","r");
-    temp =fopen("temp.txt","w");
+    temp=fopen("temp.txt","a");
     if(fp==NULL || temp==NULL) 
     {
         printf("File error!\n");
@@ -62,50 +59,49 @@ void update()
     }
 
     printf("Enter ID to update: ");
-    scanf("%d",&id);
+    scanf("%d",&updateid);
 
-    while(fscanf(fp,"%d %s %d",&u.id,u.name,&u.age)!=EOF)
+    while(fscanf(fp,"%d %s %d",&id,name,&age)!=EOF)
     {
-        if(u.id==id) 
+        if(id==updateid) 
         {
             printf("Enter new Name: ");
-            scanf(" %s",u.name);
+            scanf("%s",name);
             printf("Enter new Age: ");
-            scanf("%d",&u.age);
+            scanf("%d",&age);
         }
         
-        fprintf(temp,"%d %s %d\n",u.id,u.name,u.age);
+        fprintf(temp,"%d %s %d\n",id,name,age);
     }
 
     fclose(fp);
     fclose(temp);
     remove("users.txt");
-    rename("temp.txt","users.txt");
+    rename("temp.txt", "users.txt");
     printf("Update done.\n");
 }
 
-void deleteuser() 
+void deleteuser()
 {
-    FILE *fp, *temp;
-    struct user u;
-    int id;
+    FILE *fp,*temp;
+    int id,age,deleteid;
+    char name[50];
 
     fp=fopen("users.txt","r");
-    temp=fopen("temp.txt","w");
-    
-    if(fp==NULL || temp==NULL) 
+    temp=fopen("temp.txt","a");
+    if(fp==NULL || temp == NULL) 
     {
         printf("File error!\n");
         return;
     }
-    
-    printf("Enter ID to delete: ");
-    scanf("%d",&id);
 
-    while(fscanf(fp,"%d %s %d",&u.id,u.name,&u.age)!=EOF)
+    printf("Enter ID to delete: ");
+    scanf("%d",&deletedid);
+
+    while(fscanf(fp,"%d %s %d",&id,name,&age)!=EOF)
     {
-        if(u.id!=id)  
-        fprintf(temp,"%d %s %d\n",u.id,u.name,u.age);
+        if(id!=deleteid) 
+        fprintf(temp,"%d %s %d\n",id,name,age);
     }
 
     fclose(fp);
@@ -115,7 +111,7 @@ void deleteuser()
     printf("Delete done.\n");
 }
 
-int main()
+int main() 
 {
     create();
     create();
