@@ -96,7 +96,7 @@ void deleteuser()
     }
 
     printf("Enter ID to delete: ");
-    scanf("%d",&deletedid);
+    scanf("%d",&deleteid);
 
     while(fscanf(fp,"%d %s %d",&id,name,&age)!=EOF)
     {
