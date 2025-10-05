@@ -1,85 +1,132 @@
 #include <stdio.h>
-int main()
+#include <ctype.h>
+#include <string.h>
+int evaluateExpression(const char *expression)
 {
-    char expr[100];
-    int i,num=0,result=0,last=0;
-    char op='+';
-    
-    printf("Enter expression: ");
-    scanf("%[^\n]",expr);
+    int i = 0,number = 0,result = 0,lastTerm = 0;
+    char currentOperator = '+';
+    int digitFound = 0;
 
-    for(i=0;expr[i]!='\0';i++)
-    {
-        if(expr[i]==' ')
-        continue; 
+    while(expression[i] != '\0') 
+	{
+        char ch = expression[i];
         
-        if(expr[i]>='0' && expr[i]<='9')
-        num=num*10+(expr[i]-'0');
+        if(isspace(ch))
+		{
+            i++;
+            continue;
+        }
+
+        if(isdigit(ch))
+		{
+            number = number * 10 + (ch - '0');
+            digitFound = 1;
+        }
         
-        else 
-        {
-            if(op=='+')
-            {
-                result+=last;
-                last=num;
+        else
+		{
+            if(!digitFound && (ch == '+' || ch == '-' || ch == '*' || ch == '/')) 
+			{
+                printf("Error: Invalid syntax near '%c'.\n", ch);
+                return 0;
             }
+
+            if(currentOperator == '+') 
+			{
+                result += lastTerm;
+                lastTerm = number;
+            } 
+			
+			else if(currentOperator == '-') 
+			{
+                result += lastTerm;
+                lastTerm =- number;
+            } 
+			
+			else if(currentOperator == '*') 
+            lastTerm = lastTerm * number;
             
-            else if(op=='-')
-            {
-                result+=last;
-                last=-num;
-            }
-            
-            else if(op=='*')
-            last=last*num;
-            
-            else if(op=='/')
-            {
-                if(num==0)
-                {
+			else if(currentOperator == '/') 
+			{
+                if(number == 0) 
+				{
                     printf("Error: Division by zero.\n");
                     return 0;
                 }
-                last=last/num;
+                
+                lastTerm = lastTerm / number;
             }
-            
-            else
-            {
-                printf("Error: Invalid expression.\n");
+
+            if(ch != '+' && ch != '-' && ch != '*' && ch != '/') 
+			{
+                printf("Error: Invalid operator '%c' in expression.\n", ch);
                 return 0;
             }
-            op=expr[i];
-            num=0;
+
+            currentOperator = ch;
+            number = 0;
+            digitFound = 0;
         }
+        
+        i++;
     }
 
-    if(op=='+')
-    {
-        result+=last;
-        last=num;
+    if(!digitFound) 
+	{
+        printf("Error: Expression cannot end with an operator.\n");
+        return 0;
     }
-    
-    else if(op=='-')
-    {
-        result+=last;
-        last=-num;
-    }
-    
-    else if(op=='*')
-    last=last*num;
-    
-    else if(op=='/')
-    {
-        if(num==0)
-        {
+
+    if(currentOperator == '+') 
+	{
+        result += lastTerm;
+        lastTerm = number;
+    } 
+	
+	else if(currentOperator == '-') 
+	{
+        result += lastTerm;
+        lastTerm =- number;
+    } 
+	
+	else if(currentOperator == '*')
+    lastTerm = lastTerm * number;
+        
+    else if(currentOperator == '/') 
+	{
+        if(number == 0) 
+		{
             printf("Error: Division by zero.\n");
             return 0;
         }
-        last=last/num;
+        
+        lastTerm = lastTerm / number;
     }
-    
-    result+=last;
+    result += lastTerm;
+    return result;
+}
 
-    printf("%d", result);
+int main() 
+{
+    char expression[100];
+
+    printf("Enter expression: ");
+    if(fgets(expression, sizeof(expression), stdin) == NULL) 
+	{
+        printf("Error: Failed to read input.\n");
+        return 0;
+    }
+
+    expression[strcspn(expression, "\n")] = '\0';
+
+    if(strlen(expression) == 0) 
+	{
+        printf("Error: Empty expression.\n");
+        return 0;
+    }
+
+    int answer = evaluateExpression(expression);
+    printf("Result: %d\n", answer);
+
     return 0;
 }
