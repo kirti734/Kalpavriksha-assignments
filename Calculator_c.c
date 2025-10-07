@@ -1,126 +1,121 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+
+int applyOperation(char operator_, int result, int *lastTerm, int number)
+{
+    if (operator_ == '+')
+    {
+        result += *lastTerm;
+        *lastTerm = number;
+    }
+    
+    else if (operator_ == '-')
+    {
+        result += *lastTerm;
+        *lastTerm = -number;
+    }
+    
+    else if (operator_ == '*')
+    {
+        *lastTerm = (*lastTerm) * number;
+    }
+    
+    else if (operator_ == '/')
+    {
+        if (number == 0)
+        {
+            printf("Error: Division by zero.\n");
+            return 0; 
+        }
+        
+        *lastTerm = (*lastTerm) / number;
+    }
+    
+    else
+    {
+        printf("Error: Invalid operator '%c'.\n", operator_);
+        return 0;
+    }
+
+    return result;
+}
+
 int evaluateExpression(const char *expression)
 {
-    int i = 0,number = 0,result = 0,lastTerm = 0;
+    int i = 0;
+	int number = 0;
+	int result = 0;
+	int lastTerm = 0;
     char currentOperator = '+';
-    int digitFound = 0;
+    int hasDigit = 0;
 
-    while(expression[i] != '\0') 
-	{
-        char ch = expression[i];
-        
-        if(isspace(ch))
-		{
+    while (expression[i] != '\0')
+    {
+        char currentExpression = expression[i];
+
+        if (isspace(currentExpression))
+        {
             i++;
             continue;
         }
 
-        if(isdigit(ch))
-		{
-            number = number * 10 + (ch - '0');
-            digitFound = 1;
+        if (isdigit(currentExpression))
+        {
+            number = number * 10 + (currentExpression - '0');
+            hasDigit = 1;
         }
         
         else
-		{
-            if(!digitFound && (ch == '+' || ch == '-' || ch == '*' || ch == '/')) 
-			{
-                printf("Error: Invalid syntax near '%c'.\n", ch);
+        {
+            if (!hasDigit && (currentExpression == '+' || currentExpression == '-' || currentExpression == '*' || currentExpression == '/'))
+            {
+                printf("Error: Invalid syntax near '%c'.\n", currentExpression);
                 return 0;
             }
 
-            if(currentOperator == '+') 
-			{
-                result += lastTerm;
-                lastTerm = number;
-            } 
-			
-			else if(currentOperator == '-') 
-			{
-                result += lastTerm;
-                lastTerm =- number;
-            } 
-			
-			else if(currentOperator == '*') 
-            lastTerm = lastTerm * number;
-            
-			else if(currentOperator == '/') 
-			{
-                if(number == 0) 
-				{
-                    printf("Error: Division by zero.\n");
-                    return 0;
-                }
-                
-                lastTerm = lastTerm / number;
-            }
+            result = applyOperation(currentOperator, result, &lastTerm, number);
+            if (currentOperator == '/' && number == 0)
+            {
+            	return 0;
+			} 
 
-            if(ch != '+' && ch != '-' && ch != '*' && ch != '/') 
-			{
-                printf("Error: Invalid operator '%c' in expression.\n", ch);
+            if (currentExpression != '+' && currentExpression != '-' && currentExpression != '*' && currentExpression != '/')
+            {
+                printf("Error: Invalid operator '%c' in expression.\n", currentExpression1);
                 return 0;
             }
 
-            currentOperator = ch;
+            currentOperator = currentExpression;
             number = 0;
-            digitFound = 0;
+            hasDigit = 0;
         }
-        
+
         i++;
     }
 
-    if(!digitFound) 
-	{
+    if (!hasDigit)
+    {
         printf("Error: Expression cannot end with an operator.\n");
         return 0;
     }
 
-    if(currentOperator == '+') 
-	{
-        result += lastTerm;
-        lastTerm = number;
-    } 
-	
-	else if(currentOperator == '-') 
-	{
-        result += lastTerm;
-        lastTerm =- number;
-    } 
-	
-	else if(currentOperator == '*')
-    lastTerm = lastTerm * number;
-        
-    else if(currentOperator == '/') 
-	{
-        if(number == 0) 
-		{
-            printf("Error: Division by zero.\n");
-            return 0;
-        }
-        
-        lastTerm = lastTerm / number;
-    }
+    result = applyOperation(currentOperator, result, &lastTerm, number);
+
     result += lastTerm;
     return result;
 }
 
-int main() 
+int main()
 {
     char expression[100];
 
     printf("Enter expression: ");
-    if(fgets(expression, sizeof(expression), stdin) == NULL) 
-	{
-        printf("Error: Failed to read input.\n");
-        return 0;
-    }
-
+    fgets(expression, sizeof(expression), stdin);
     expression[strcspn(expression, "\n")] = '\0';
 
-    if(strlen(expression) == 0) 
-	{
+    if (strlen(expression) == 0)
+    {
         printf("Error: Empty expression.\n");
         return 0;
     }
