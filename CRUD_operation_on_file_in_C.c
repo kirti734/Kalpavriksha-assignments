@@ -34,7 +34,7 @@ void createUser()
         return;
     }
 
-    printf("Enter User ID (letters or numbers allowed): ");
+    printf("Enter User ID: ");
     scanf("%s", user.userId);
     getchar(); 
 
