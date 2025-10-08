@@ -2,42 +2,36 @@
 #include <ctype.h>
 #include <string.h>
 
-int applyOperation(char operator_, int result, int *lastTerm, int number)
+int applyOperation(char currentOperator, int result, int *lastTerm, int number)
 {
-    if (operator_ == '+')
+    if (currentOperator == '+')
     {
         result += *lastTerm;
         *lastTerm = number;
     }
-    
-    else if (operator_ == '-')
+    else if (currentOperator == '-')
     {
         result += *lastTerm;
         *lastTerm = -number;
     }
-    
-    else if (operator_ == '*')
+    else if (currentOperator == '*')
     {
         *lastTerm = (*lastTerm) * number;
     }
-    
-    else if (operator_ == '/')
+    else if (currentOperator == '/')
     {
         if (number == 0)
         {
             printf("Error: Division by zero.\n");
             return 0; 
         }
-        
         *lastTerm = (*lastTerm) / number;
     }
-    
     else
     {
         printf("Error: Invalid operator '%c'.\n", operator_);
         return 0;
     }
-
     return result;
 }
 
@@ -59,13 +53,12 @@ int evaluateExpression(const char *expression)
             i++;
             continue;
         }
-
+		
         if (isdigit(currentExpression))
         {
             number = number * 10 + (currentExpression - '0');
             hasDigit = 1;
         }
-        
         else
         {
             if (!hasDigit && (currentExpression == '+' || currentExpression == '-' || currentExpression == '*' || currentExpression == '/'))
