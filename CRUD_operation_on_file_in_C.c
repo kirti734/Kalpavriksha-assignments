@@ -173,7 +173,7 @@ void deleteUser()
 	FILE *temp;
     struct User user;
     char deleteId[50];
-    int found = 0;
+    int isIdFound = 0;
 
     fp = fopen("users.txt", "r");
     temp = fopen("temp.txt", "w");
@@ -195,7 +195,7 @@ void deleteUser()
 		}
         else
         {
-        	found = 1;
+        	isIdFound = 1;
 		}
     }
 
@@ -204,7 +204,7 @@ void deleteUser()
     remove("users.txt");
     rename("temp.txt", "users.txt");
 
-    if (found)
+    if (isIdFound)
     {
     	printf("? User deleted successfully.\n");
 	}	
