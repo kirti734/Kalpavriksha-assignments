@@ -161,7 +161,6 @@ void updateUser()
     {
     	printf("? User updated successfully.\n");
 	}
-	
     else
     {
     	printf("?? User with ID %s not found.\n", updateId);	
@@ -208,8 +207,7 @@ void deleteUser()
     if (found)
     {
     	printf("? User deleted successfully.\n");
-	}
-		
+	}	
     else
     {
     	printf("?? User with ID %s not found.\n", deleteId);
