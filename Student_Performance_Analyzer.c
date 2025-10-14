@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct User
+struct Student
 {
 	int rollNumber;
 	char studentName[100];
@@ -11,7 +11,7 @@ struct User
 	int marks3;
 };
 
-void recursiveSort(int listofStudents[], int numberofStudents)
+void sortRollNumbers(int listofStudents[], int numberofStudents)
 {
     if (numberofStudents == 1)
     {
@@ -32,7 +32,7 @@ void recursiveSort(int listofStudents[], int numberofStudents)
     recursiveSort(listofStudents, numberofStudents - 1);
 }
 
-void performanceAnalyzer(struct User users[] , int numberofStudents)
+void performanceAnalyzer(struct Student students[] , int numberofStudents)
 {
 	int i = 0;
 	int marksTotal = 0;
@@ -41,12 +41,12 @@ void performanceAnalyzer(struct User users[] , int numberofStudents)
 	
 	while(i < numberofStudents)
 	{
-		marksTotal = users[i].marks1 + users[i].marks2 + users[i].marks3;
+		marksTotal = students[i].marks1 + students[i].marks2 + students[i].marks3;
 		marksAverage = marksTotal / numberofStudents;
-		listofStudents[i] = users[i].rollNumber;
+		listofStudents[i] = students[i].rollNumber;
 		
-		printf("Roll: %d\n", users[i].rollNumber);
-		printf("Name: %s\n", users[i].studentName);
+		printf("Roll: %d\n", students[i].rollNumber);
+		printf("Name: %s\n", students[i].studentName);
 		printf("Total: %d\n", marksTotal);
 		printf("Average %f\n", marksAverage);
 		
@@ -82,7 +82,7 @@ void performanceAnalyzer(struct User users[] , int numberofStudents)
 	i = 0;
 	printf("List of Roll Number (via recursion): ");
 		
-	recursiveSort(listofStudents , numberofStudents);
+	sortRollNumbers(listofStudents , numberofStudents);
 		
 	while (i < numberofStudents)
 	{
@@ -97,13 +97,13 @@ int main()
 	int numberofStudents = 0;
 	scanf("%d", & numberofStudents);
 	
-	struct User users[numberofStudents];
+	struct Student students[numberofStudents];
 	int i;
 	
 	for (i = 0 ;i < numberofStudents ; i++)
 	{
-		scanf("%d %s %d %d %d", &users[i].rollNumber, users[i].studentName, &users[i].marks1, &users[i].marks2, &users[i].marks3);
+		scanf("%d %s %d %d %d", &students[i].rollNumber, students[i].studentName, &students[i].marks1, &students[i].marks2, &students[i].marks3);
 	}
 	
-	performanceAnalyzer(users , numberofStudents);
+	performanceAnalyzer(students , numberofStudents);
 }
