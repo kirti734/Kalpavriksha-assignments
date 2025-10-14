@@ -6,9 +6,7 @@ struct Student
 {
 	int rollNumber;
 	char studentName[100];
-	int marks1;
-	int marks2;
-	int marks3;
+	int marks[3];
 };
 
 void sortRollNumbers(int listofStudents[], int numberofStudents)
@@ -29,19 +27,25 @@ void sortRollNumbers(int listofStudents[], int numberofStudents)
         }
     }
     
-    recursiveSort(listofStudents, numberofStudents - 1);
+    sortRollNumbers(listofStudents, numberofStudents - 1);
 }
 
 void performanceAnalyzer(struct Student students[] , int numberofStudents)
 {
 	int i = 0;
+	int j = 0;
 	int marksTotal = 0;
 	float marksAverage;
 	int listofStudents[numberofStudents];
 	
 	while(i < numberofStudents)
 	{
-		marksTotal = students[i].marks1 + students[i].marks2 + students[i].marks3;
+		marksTotal = 0;
+		for(j = 0; j < 3; j++)
+		{
+			marksTotal += students[i].marks[j];
+		}
+		
 		marksAverage = marksTotal / numberofStudents;
 		listofStudents[i] = students[i].rollNumber;
 		
@@ -80,7 +84,7 @@ void performanceAnalyzer(struct Student students[] , int numberofStudents)
 	}
 	
 	i = 0;
-	printf("List of Roll Number (via recursion): ");
+	printf("List of Roll Number: ");
 		
 	sortRollNumbers(listofStudents , numberofStudents);
 		
@@ -99,10 +103,15 @@ int main()
 	
 	struct Student students[numberofStudents];
 	int i;
+	int j;
 	
 	for (i = 0 ;i < numberofStudents ; i++)
 	{
-		scanf("%d %s %d %d %d", &students[i].rollNumber, students[i].studentName, &students[i].marks1, &students[i].marks2, &students[i].marks3);
+		scanf("%d %s", &students[i].rollNumber, students[i].studentName);
+		for (j = 0; j < 3; j++)
+		{
+			scanf("%d", &students[i].marks[j]);
+		}
 	}
 	
 	performanceAnalyzer(students , numberofStudents);
