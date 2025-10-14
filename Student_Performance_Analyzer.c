@@ -16,14 +16,15 @@ void sortRollNumbers(int listofStudents[], int numberofStudents)
     	return;
 	}
 	int i;
+	int rollTemp;
         
     for (i = 0; i < numberofStudents - 1; i++)
     {
         if (listofStudents[i] > listofStudents[i + 1])
         {
-            int temp = listofStudents[i];
+            rollTemp = listofStudents[i];
             listofStudents[i] = listofStudents[i + 1];
-            listofStudents[i + 1] = temp;
+            listofStudents[i + 1] = rollTemp;
         }
     }
     
@@ -46,13 +47,13 @@ void performanceAnalyzer(struct Student students[] , int numberofStudents)
 			marksTotal += students[i].marks[j];
 		}
 		
-		marksAverage = marksTotal / numberofStudents;
+		marksAverage = marksTotal / 3.0;
 		listofStudents[i] = students[i].rollNumber;
 		
 		printf("Roll: %d\n", students[i].rollNumber);
 		printf("Name: %s\n", students[i].studentName);
 		printf("Total: %d\n", marksTotal);
-		printf("Average %f\n", marksAverage);
+		printf("Average %0.2f\n", marksAverage);
 		
 		if (marksAverage >= 85)
 		{
@@ -84,7 +85,7 @@ void performanceAnalyzer(struct Student students[] , int numberofStudents)
 	}
 	
 	i = 0;
-	printf("List of Roll Number: ");
+	printf("List of Roll Number (via recursion): ");
 		
 	sortRollNumbers(listofStudents , numberofStudents);
 		
