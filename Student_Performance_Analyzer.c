@@ -1,9 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #define SUBJECT_COUNT 3
 #define NAME_LENGTH 100
 
-enum Grade {A ,B, C, D, F};
+enum Grade {A, B, C, D, F};
 
 struct Student
 {
@@ -115,12 +116,12 @@ const char* performanceStars(enum Grade grade)
 
 int calculateTotal(int marks[])
 {
-	int i = 0;
+	int index = 0;
 	int marksTotal = 0;
 	
-	for(i = 0; i < SUBJECT_COUNT; i++)
+	for(index = 0; index < SUBJECT_COUNT; index++)
 	{
-		marksTotal += marks[i];
+		marksTotal += marks[index];
 	}
 	
 	return marksTotal;
@@ -128,29 +129,35 @@ int calculateTotal(int marks[])
 
 float calculateAverage(int totalMarks)
 {
-	int marksAverage;
+	float marksAverage;
 	marksAverage = totalMarks / (float)(SUBJECT_COUNT);
 	return marksAverage;
 }
 
 void performanceAnalyzer(struct Student students[] , int numberofStudents)
 {
-	int i = 0;
+	int index = 0;
 	int totalMarks;
 	float marksAverage;
-	int listofStudents[numberofStudents];
+	int *listofStudents = malloc(numberofStudents * sizeof(int));
 	
-	while(i < numberofStudents)
+	if(listofStudents == NULL)
 	{
-		totalMarks = calculateTotal(students[i].marks);
+		printf("Memory allocation is failed\n");
+		return;
+	}
+	
+	while(index < numberofStudents)
+	{
+		totalMarks = calculateTotal(students[index].marks);
 		
 		marksAverage = calculateAverage(totalMarks);
-		listofStudents[i] = students[i].rollNumber;
+		listofStudents[index] = students[index].rollNumber;
 		
-		printf("Roll: %d\n", students[i].rollNumber);
-		printf("Name: %s\n", students[i].studentName);
+		printf("Roll: %d\n", students[index].rollNumber);
+		printf("Name: %s\n", students[index].studentName);
 		printf("Total: %d\n", totalMarks);
-		printf("Average %0.2f\n", marksAverage);
+		printf("Average: %0.2f\n", marksAverage);
 		
 		enum Grade grade = calculateGrade(marksAverage);
 		
@@ -159,22 +166,24 @@ void performanceAnalyzer(struct Student students[] , int numberofStudents)
 		
 		printf("\n");
 		
-		i++;	
+		index++;	
 	}
 	
-	i = 0;
+	index = 0;
 		
 	sortRollNumbers(listofStudents , numberofStudents);
 	
 	printf("List of Roll Number (via recursion): ");
-	printRollNumber(listofStudents , numberofStudents, i);
+	printRollNumber(listofStudents , numberofStudents, index);
+	
+	free(listofStudents);
 }
 
 void getStudentSubjectMarks(int marks[])
 {
-	int i;
+	int index;
 	int subjectMarks;
-	for (i = 0; i < SUBJECT_COUNT; i++)
+	for (index = 0; index < SUBJECT_COUNT; index++)
 		{
 			if (scanf("%d", &subjectMarks) != 1)
 			{
@@ -188,18 +197,30 @@ void getStudentSubjectMarks(int marks[])
 				return;
 			}
 
-			marks[i] = subjectMarks;
+			marks[index] = subjectMarks;
 		}
 }
 
 void insertStudentDetails(struct Student students[] , int numberofStudents)
 {
-	int i;
+	int index;
 	
-	for (i = 0 ;i < numberofStudents ; i++)
+	for (index = 0; index < numberofStudents; index++)
 	{
-		scanf("%d %99s", &students[i].rollNumber, students[i].studentName);
-		getStudentSubjectMarks(students[i].marks);
+		if (scanf("%d ", & students[index].rollNumber) != 1)
+		{
+			printf("Roll Number should be a numeric value");
+			return;
+		}
+	
+		if (students[index].rollNumber < 0)
+		{
+			printf("Roll Number should be a positive value");
+			return;
+		}
+		
+		scanf("%99s", students[index].studentName);
+		getStudentSubjectMarks(students[index].marks);
 	}
 }
 
@@ -210,17 +231,24 @@ int main()
 	if (scanf("%d", & numberofStudents) != 1)
 	{
 		printf("Number of students should be a numeric value");
-		return;
+		return 1;
 	}
 
 	if (numberofStudents < 0)
 	{
 		printf("Number of students should be a positive value");
-		return;
+		return 1;
 	}
 	
-	struct Student students[numberofStudents];
+	struct Student *students = malloc(numberofStudents * sizeof(struct Student));
+	if(students == NULL)
+	{
+		printf("Memory allocation is failed\n");
+		return 1;
+	}
 	
 	insertStudentDetails(students , numberofStudents);
 	performanceAnalyzer(students , numberofStudents);
+	
+	free(students);
 }
