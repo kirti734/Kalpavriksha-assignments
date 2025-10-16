@@ -1,3 +1,0 @@
-1|Kirti Agarwal|20
-1a|Seema Agarwal|48
-2|Mohit Singhal|25
