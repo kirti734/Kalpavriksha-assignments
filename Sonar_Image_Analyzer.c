@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 #define MIN_PIXEL_VALUE 0
 #define MAX_PIXEL_VALUE 255
@@ -94,7 +95,7 @@ void smoothingFilter(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
 			}
 		}
 		
-		*(tempSmoothRow + currentColumnIndex) = (sumofElements / countofElements);	
+		*(tempSmoothRow + currentColumnIndex) =  (int)roundf((float)sumofElements / countofElements);	
 	}
 	
 	for (currentRowIndex = 1; currentRowIndex < sizeofMatrix; currentRowIndex++)
@@ -118,7 +119,7 @@ void smoothingFilter(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
 				}
 			}
 			
-			*(tempNextRow + currentColumnIndex) = (sumofElements / countofElements);	
+			*(tempNextRow + currentColumnIndex) =  (int)roundf((float)sumofElements / countofElements);	
 		}
 		
 		for (currentColumnIndex = 0; currentColumnIndex < sizeofMatrix; currentColumnIndex++)
