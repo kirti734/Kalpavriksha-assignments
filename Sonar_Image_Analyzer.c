@@ -9,7 +9,7 @@
 #define MIN_MATRIX_SIZE 2
 #define MAX_MATRIX_SIZE 10
 
-void generateMatrix(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
+void generateMatrix(int sizeofMatrix , int **originalMatrix)
 {
 	int rowIndex = 0;
 	int columnIndex = 0;
@@ -30,7 +30,7 @@ void swapNumbers(int *firstElement , int *secondElement)
 	*secondElement = tempValue;
 }
 
-void transposeMatrix(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
+void transposeMatrix(int sizeofMatrix , int **originalMatrix)
 {
 	int rowIndex = 0;
 	int columnIndex = 0;
@@ -44,7 +44,7 @@ void transposeMatrix(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
 	}
 }
 
-void reverseRows(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
+void reverseRows(int sizeofMatrix , int **originalMatrix)
 {
 	int rowIndex = 0;
 	int leftRowIndex = 0;
@@ -59,15 +59,15 @@ void reverseRows(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
 	}
 }
 
-void rotate90Degree(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
+void rotate90Degree(int sizeofMatrix , int **originalMatrix)
 {
 	transposeMatrix(sizeofMatrix , originalMatrix);
 	reverseRows(sizeofMatrix , originalMatrix);
 }
 
-void smoothingFilter(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
+void smoothingFilter(int sizeofMatrix , int **originalMatrix)
 {
-	int tempSmoothRow[sizeofMatrix];
+	int *tempSmoothRow = malloc(sizeofMatrix * sizeof(int));
 	
 	int currentRowIndex = 0;
 	int currentColumnIndex = 0;
@@ -100,7 +100,7 @@ void smoothingFilter(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
 	
 	for (currentRowIndex = 1; currentRowIndex < sizeofMatrix; currentRowIndex++)
 	{
-		int tempNextRow[sizeofMatrix];
+		int *tempNextRow = malloc(sizeofMatrix * sizeof(int));
 		
 		for (currentColumnIndex = 0; currentColumnIndex < sizeofMatrix; currentColumnIndex++)
 		{
@@ -131,15 +131,19 @@ void smoothingFilter(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
 		{
 			*(tempSmoothRow + currentColumnIndex) = *(tempNextRow + currentColumnIndex);
 		}
+		
+		free(tempNextRow);
 	}
 	
 	for (currentColumnIndex = 0; currentColumnIndex < sizeofMatrix; currentColumnIndex++)
 	{
 		*(*(originalMatrix + (sizeofMatrix - 1)) + currentColumnIndex) = *(tempSmoothRow + currentColumnIndex);
 	}
+	
+	free(tempSmoothRow);
 }
 
-void printMatrix(int sizeofMatrix , int (*originalMatrix)[sizeofMatrix])
+void printMatrix(int sizeofMatrix , int **originalMatrix)
 {
 	int rowIndex = 0;
 	int columnIndex = 0;
@@ -179,7 +183,14 @@ int main()
 		return 1;
 	}
 	
-	int originalMatrix[sizeofMatrix][sizeofMatrix];
+	int index;
+	
+	int **originalMatrix = malloc(sizeofMatrix * sizeof(int *));
+	
+	for (int index = 0; index < sizeofMatrix; index++)
+	{
+		*(originalMatrix + index) = malloc(sizeofMatrix * sizeof(int));
+	}
 	
 	srand(time(NULL));
 	
@@ -195,6 +206,12 @@ int main()
 	smoothingFilter(sizeofMatrix , originalMatrix);
 	printf("Final Output\n");
 	printMatrix(sizeofMatrix , originalMatrix);
+	
+	for (int index = 0; index < sizeofMatrix; index++)
+	{
+		free(*(originalMatrix + index));
+	}
+	free(originalMatrix);
 	
 	return 0;
 }
