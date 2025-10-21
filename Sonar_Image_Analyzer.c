@@ -65,7 +65,7 @@ void rotate90Degree(int sizeofMatrix , int **originalMatrix)
 	reverseRows(sizeofMatrix , originalMatrix);
 }
 
-void smoothingFilter(int sizeofMatrix , int **originalMatrix)
+void applySmoothingFilter(int sizeofMatrix , int **originalMatrix)
 {
 	int *tempSmoothRow = malloc(sizeofMatrix * sizeof(int));
 	
@@ -171,13 +171,7 @@ int main()
 		return 1;
 	}
 	
-	if (sizeofMatrix < 0)
-	{
-		printf("Size OF Matrix should be a positive value");
-		return 1;
-	}
-	
-	if(sizeofMatrix < MIN_MATRIX_SIZE || sizeofMatrix > MAX_MATRIX_SIZE)
+	if(sizeofMatrix < 0 || sizeofMatrix < MIN_MATRIX_SIZE || sizeofMatrix > MAX_MATRIX_SIZE)
 	{
 		printf("Size OF Matrix should be in between 2 and 10");
 		return 1;
@@ -203,7 +197,7 @@ int main()
 	printf("Rotated:\n");
 	printMatrix(sizeofMatrix , originalMatrix);
 	
-	smoothingFilter(sizeofMatrix , originalMatrix);
+	applySmoothingFilter(sizeofMatrix , originalMatrix);
 	printf("Final Output\n");
 	printMatrix(sizeofMatrix , originalMatrix);
 	
