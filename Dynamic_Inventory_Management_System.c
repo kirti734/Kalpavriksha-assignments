@@ -14,6 +14,9 @@
 #define MIN_PRODUCT_ID 1
 #define MAX_PRODUCT_ID 10000
 
+#define MIN_NUMBER_OF_PRODUCTS 1
+#define MAX_NUMBER_OF_PRODUCTS 100
+
 struct Product
 {
 	int productId;
@@ -347,9 +350,9 @@ int main()
 		return 1;	
 	}	
 	
-	if(numberOfProducts < 0)
+	if (numberOfProducts < MIN_NUMBER_OF_PRODUCTS  || numberOfProducts > MAX_NUMBER_OF_PRODUCTS)
 	{
-		printf("Number of Products shuld be positive");
+		printf("Number of Products should in between 1 and 100");
 		return 1;
 	}
 	
