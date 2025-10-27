@@ -341,7 +341,7 @@ int main()
 	
 	printf("Enter intial number of products: ");
 	
-	if (scanf("%d", & numberOfProducts) != 1)
+	if (scanf("%d", &numberOfProducts) != 1)
 	{
 		printf("Number of Products should be a numric value");
 		return 1;	
@@ -377,7 +377,7 @@ int main()
 		printf("\n 7. Delete Product \n");
 		printf("\n 8. Exit \n");
 		printf("\nEnter your choice: ");
-		scanf("%d", & choice);
+		scanf("%d", &choice);
 		
 		switch(choice)
 		{
