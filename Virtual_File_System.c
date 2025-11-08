@@ -129,9 +129,9 @@ void mkdirCommand (char* directoryName)
 		struct FileNode* head = cwd -> child;
 		struct FileNode* tail = head;
 		
-		while (tail -> next != NULL)
+		while (tail -> next != head)
 		{
-			tail = tail ->next;
+			tail = tail -> next;
 		} 
 		
 		tail -> next = newDirectory;
@@ -189,7 +189,7 @@ void createCommand (char* newFileName)
 		struct FileNode* head = cwd -> child;
 		struct FileNode* tail = head;
 		
-		while (tail -> next != NULL)
+		while (tail -> next != head)
 		{
 			tail = tail -> next;
 		} 
