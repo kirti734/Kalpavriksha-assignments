@@ -234,7 +234,7 @@ void writeCommand (char* targetFileName, char* content)
 	
 	if(targetFile == NULL)
 	{
-		printf("%s is not present in the current directory", targetFileName);
+		printf("%s is not present in the current directory\n", targetFileName);
 		return;
 	}
 	
