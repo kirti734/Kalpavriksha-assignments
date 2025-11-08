@@ -330,7 +330,7 @@ void readCommand (char* targetFileName)
 	
 	if(targetFile == NULL)
 	{
-		printf("%s is not present in the current directory", targetFileName);
+		printf("%s is not present in the current directory\n", targetFileName);
 		return;
 	}
 	
@@ -383,7 +383,7 @@ void deleteCommand (char* targetFileName)
 	
 	if(targetFile == NULL)
 	{
-		printf("%s is not present in the current directory", targetFileName);
+		printf("%s is not present in the current directory\n", targetFileName);
 		return;
 	}
 	
@@ -598,7 +598,7 @@ void cdCommand(char* directoryName)
 	
 	if(targetDirectory == NULL)
 	{
-		printf("%s is not present in the current directory", directoryName);
+		printf("%s is not present in the current directory\n", directoryName);
 		return;
 	}
 	
@@ -652,7 +652,7 @@ void dfCommand()
 	printf("Total Blocks:%d\n", TOTAL_BLOCKS);
 	printf("Used Blocks: %d\n", usedBlocks);
 	printf("Free Blocks: %d\n", freeBlockCount);
-	printf("Disk Usage %0.2%%f", diskUsage);
+	printf("Disk Usage %0.2%%f\n", diskUsage);
 
 }
 
