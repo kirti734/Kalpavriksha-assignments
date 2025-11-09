@@ -7,7 +7,7 @@
 #define FILE_NAME 50
 #define DIRECTORY_NAME 50
 #define COMMAND_NAME_SIZE 100
-#define MAX_PATH_LENGTH 1024
+#define MAX_DEPTH 50
 
 struct FreeBlock {
     int blockIndex;
@@ -614,25 +614,27 @@ void pwdCommand()
 		printf("No current working directory\n");
 		return;
 	}
-	char path[MAX_PATH_LENGTH] = "";
+	
+	char path[MAX_DEPTH][FILE_NAME];
 	struct FileNode* temp = cwd;
+	int count = 0;
 	
 	while (temp != NULL)
     {
-        char tempPath[MAX_PATH_LENGTH];
-        if (temp -> parent == NULL) 
-        {
-        	sprintf(tempPath, "/%s", temp -> fileName);
-		}
-        else
-        {
-        	sprintf(tempPath, "/%s%s", temp -> fileName, path);
-		}
-
-        strcpy(path, tempPath);
+        strcpy(path[count], temp -> fileName);
         temp = temp -> parent;
+        count++;
     }
-	printf("%s\n",path);
+    
+    printf("/");
+    
+    int index = 0;
+	
+	for (index = count - 1; index > 0; index--)  
+    {
+    	 printf("%s/", path[index - 1]);
+	}
+    printf("\n");
 }
 
 void dfCommand()
