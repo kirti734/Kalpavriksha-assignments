@@ -659,7 +659,7 @@ void dfCommand()
 	}
 	
 	int usedBlocks = TOTAL_BLOCKS - freeBlockCount;
-	float diskUsage = ((usedBlocks) / (TOTAL_BLOCKS)) * 100.00;
+	float diskUsage = (((float)usedBlocks) / (TOTAL_BLOCKS)) * 100.00;
 	
 	printf("Total Blocks:%d\n", TOTAL_BLOCKS);
 	printf("Used Blocks: %d\n", usedBlocks);
