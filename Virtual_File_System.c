@@ -626,13 +626,13 @@ void pwdCommand()
         count++;
     }
     
-    printf("/");
+    printf("/\n");
     
     int index = 0;
 	
 	for (index = count - 1; index > 0; index--)  
     {
-    	 printf("%s/", path[index - 1]);
+    	 printf("/%s\n", path[index - 1]);
 	}
     printf("\n");
 }
