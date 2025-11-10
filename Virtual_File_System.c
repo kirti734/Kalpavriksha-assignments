@@ -200,107 +200,117 @@ void createCommand (char* newFileName)
 
 	printf("File '%s' created successfully\n", newFileName);
 }
-
-void writeCommand (char* targetFileName, char* content)
+void writeCommand(char *targetFileName)
 {
-	if(targetFileName == NULL && content == NULL)
+    if(targetFileName == NULL )
 	{
-		printf("File name and content required to enter\n");
+		printf("File name required to enter\n");
 		return;
 	}
-	
-	if(content == NULL || strlen(targetFileName) == 0)
-	{
-		printf("File content required to enter\n");
-		return;
-	}
-	
-	struct FileNode* currentChild = cwd -> child;
-	struct FileNode* targetFile = NULL;
-	
-	if (currentChild != NULL)
-	{
-		struct FileNode* start = currentChild;
-		do
-		{
-			if(strcmp(currentChild -> fileName , targetFileName) == 0 && currentChild -> isDirectory == 0)
-			{
-				targetFile = currentChild;
-				break;
-			}
-			currentChild = currentChild -> next;
-		} while(currentChild != start);
-	}
-	
-	if(targetFile == NULL)
+
+    struct FileNode *currentChild = cwd -> child;
+    struct FileNode *targetFile = NULL;
+
+    if (currentChild != NULL)
+    {
+        struct FileNode *start = currentChild;
+        do
+        {
+            if (strcmp(currentChild -> fileName, targetFileName) == 0 && currentChild -> isDirectory == 0)
+            {
+                targetFile = currentChild;
+                break;
+            }
+            currentChild = currentChild -> next;
+        } while (currentChild != start);
+    }
+
+    if(targetFile == NULL)
 	{
 		printf("%s is not present in the current directory\n", targetFileName);
 		return;
 	}
-	
-	int contentLength = strlen(content);
-	int usedBytes = targetFile -> fileSize % BLOCK_SIZE;
-	int freeSpaceLastBlock = (usedBytes == 0 && targetFile -> fileSize > 0) ? 0 : BLOCK_SIZE - usedBytes;
-	
-	int freeBlockCount = 0;
-	struct FreeBlock* temp = freeListHead;
-	while (temp != NULL)
-	{
-		freeBlockCount++;
-		temp = temp -> next;
-	}
-	
-	int remainingBytes = contentLength - (freeSpaceLastBlock > 0 & targetFile -> blockCount > 0 ? freeSpaceLastBlock : 0);
-	int requiredBlocks = (remainingBytes + BLOCK_SIZE - 1) / BLOCK_SIZE;
-	
-	if(requiredBlocks > freeBlockCount)
-	{
-		printf("No enough space is present in disk\n");
-		return;
-	}
-	
-	int bytesWritten = 0;
-	
-	if(freeSpaceLastBlock > 0 && targetFile -> blockCount > 0)
-	{
-		int toWrite = (contentLength < freeSpaceLastBlock) ? contentLength : freeSpaceLastBlock;
-        int lastBlockIndex = targetFile->blockPointer[targetFile->blockCount - 1];
+	int index = 0;
+
+    for (index = 0; index < targetFile -> blockCount; index++)
+    {
+        int blockIndex = targetFile -> blockPointer[index];
+        struct FreeBlock *newBlock = malloc(sizeof(struct FreeBlock));
+        newBlock -> blockIndex = blockIndex;
+        newBlock -> previous = NULL;
+        newBlock -> next = freeListHead;
         
-        memcpy(virtualDisk[lastBlockIndex] + usedBytes, content, toWrite);
-        bytesWritten += toWrite;	
-	}
-	
-	while(bytesWritten < contentLength)
-	{
-		if(freeListHead == NULL)
-		{
-			printf("No enought space present in disk\n");
-			break;
+        if (freeListHead)
+        {
+        	freeListHead -> previous = newBlock;
 		}
-		
-		int initialBlockIndex = freeListHead -> blockIndex;
-		
-		struct FreeBlock* oldHead = freeListHead;
-		freeListHead = freeListHead -> next;
-		
-		if(freeListHead == NULL)
-		{
-			freeListHead -> previous = NULL;
+        freeListHead = newBlock;
+    }
+    targetFile -> blockCount = 0;
+    targetFile -> fileSize = 0;
+
+    printf("Enter content for '%s' (type 'end' on a new line to finish):\n", targetFileName);
+
+    char line[BLOCK_SIZE];
+    int bytesWritten = 0;
+
+    while (1)
+    {
+        if (fgets(line, sizeof(line), stdin) == NULL)
+        {
+        	break;
 		}
-		free(oldHead);
-		
-		int remaining = contentLength - bytesWritten;
-		int toWrite = remaining > BLOCK_SIZE ? BLOCK_SIZE : remaining;
-		
-		memcpy(virtualDisk[initialBlockIndex], content + bytesWritten, toWrite);
-		bytesWritten += toWrite;
-		
-		targetFile -> blockPointer[targetFile -> blockCount++] = initialBlockIndex;
-	}
-	
-	targetFile -> fileSize += bytesWritten;
-	
-	printf("Data written successfully(size = %dbytes)\n",bytesWritten);	
+
+        if (strncmp(line, "end", 3) == 0 && (line[3] == '\n' || line[3] == '\0'))
+        {
+        	break;
+		}
+
+        int len = strlen(line);
+        int remaining = len;
+        int offset = 0;
+
+        while (remaining > 0)
+        {
+            if (freeListHead == NULL)
+            {
+                printf("Error: Disk full, stopping write.\n");
+                break;
+            }
+
+            int blockIndex;
+            if (targetFile -> blockCount == 0 || (targetFile -> fileSize % BLOCK_SIZE == 0))
+            {
+                blockIndex = freeListHead -> blockIndex;
+                struct FreeBlock *oldHead = freeListHead;
+                freeListHead = freeListHead -> next;
+                if (freeListHead)
+                {
+                	freeListHead -> previous = NULL;
+				}
+                free(oldHead);
+
+                targetFile -> blockPointer[targetFile -> blockCount++] = blockIndex;
+            }
+            else
+            {
+                blockIndex = targetFile -> blockPointer[targetFile -> blockCount - 1];
+            }
+
+            int usedBytes = targetFile -> fileSize % BLOCK_SIZE;
+            int freeSpace = BLOCK_SIZE - usedBytes;
+            int toWrite = (remaining < freeSpace) ? remaining : freeSpace;
+
+            memcpy(virtualDisk[blockIndex] + usedBytes, line + offset, toWrite);
+
+            targetFile -> fileSize += toWrite;
+            bytesWritten += toWrite;
+            remaining -= toWrite;
+            offset += toWrite;
+        }
+    }
+    
+    printf("Data written successfully(size = %dbytes)\n",bytesWritten);	
 }
 
 void readCommand (char* targetFileName)
@@ -735,10 +745,9 @@ int main()
 		{
 			createCommand(command + 7);
 		}
-		else if(strncmp(command,"write ",6) == 0)
+		else if (strncmp(command, "write ", 6) == 0)
 		{
-			char* fileName = strtok(command + 6, " ");
-			writeCommand(fileName, command + 6 + strlen(fileName) + 1);
+		    writeCommand(command + 6);
 		}
 		else if(strncmp(command , "read ",5) == 0)
 		{
