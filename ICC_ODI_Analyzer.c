@@ -433,7 +433,7 @@ void displayPlayersOfteam()
 	printf("\nPlayers of Team %s:\n",team -> teamName);
 	
 	printf("\n============================================================================================================\n\n");
-	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n\n");
+	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n");
 	printf("\n============================================================================================================\n\n");
 	
 	struct playerNode *temp = team -> batters;
@@ -509,7 +509,7 @@ void printTeamDescendingOrder(struct teamNode* root)
 	printf("\nTeams Sorted by Average Batting Strike Rate\n\n");
 	
 	printf("\n========================================================================\n\n");
-	printf("ID   Team Name   AvgBatSR   Total Players\n\n");
+	printf("ID   Team Name   AvgBatSR   Total Players\n");
 	printf("\n========================================================================\n\n");
 	
 	
@@ -578,7 +578,7 @@ void displayTopKPlayers()
 	printf("\nTop %d %s of Team %s:\n\n", numberOfPlayers, playerRole, team -> teamName);
 	
 	printf("\n=========================================================================================================\n\n");
-	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n\n");
+	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n");
 	printf("\n=========================================================================================================\n\n");
 	
 	while (temp != NULL && numberOfPlayers > 0)
@@ -652,7 +652,7 @@ void displayPlayersSpecificRole()
 	printf("\n%s of all teams: \n", playerRole);
 	
 	printf("\n=========================================================================================================\n\n");
-	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n\n");
+	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n");
 	printf("\n=========================================================================================================\n\n");
 	displayPlayers(root ,playerRole);
 }
@@ -695,7 +695,7 @@ int main()
 	while (1)
 	{
 		printf("\n========================================================================\n\n");
-		printf("ICC ODI Player Performance Analyzer\n\n");
+		printf("ICC ODI Player Performance Analyzer\n");
 		printf("\n========================================================================\n\n");
 		
 		printf("\n 1. Add Player to Team \n");
