@@ -282,7 +282,7 @@ struct teamNode* searchTeamById(struct teamNode* root, int teamId)
 
 void addNewPlayer()
 {
-	printf("Enter Team ID to add player: ");
+	printf("\nEnter Team ID to add player: ");
 	int teamId = 0;
 	
 	if(scanf("%d", &teamId) != 1)
@@ -309,7 +309,7 @@ void addNewPlayer()
 	
 	printf("\nEnter Player Details:\n");
 	
-	printf("Player ID: ");
+	printf("\nPlayer ID: ");
 	int playerId = 0;
 	
 	if(scanf("%d", &playerId) != 1)
@@ -522,18 +522,18 @@ void printTeamDescendingOrder(struct teamNode* root)
 
 void displayTopKPlayers()
 {
-	printf("Enter Team ID: ");
+	printf("\nEnter Team ID: ");
 	int teamId = 0;
 	
 	if(scanf("%d", &teamId) != 1)
 	{
-		printf("Team Id should be numeric\n");
+		printf("\nTeam Id should be numeric\n");
 		return;
 	}
 	
 	if(teamId < MIN_ID || teamId > MAX_ID)
 	{
-		printf("Team Id should be in between 1 and 1500");
+		printf("\nTeam Id should be in between 1 and 1500");
 		return;
 	}
 	
@@ -543,10 +543,10 @@ void displayTopKPlayers()
 	int playerRoleNumber = 0;
 	struct playerNode *temp;
 	
-	printf("Role (1-Batsman, 2-Bowler, 3-All-rounder): ");
+	printf("\nRole (1-Batsman, 2-Bowler, 3-All-rounder): ");
 	if(scanf("%d", &playerRoleNumber) != 1)
 	{
-		printf("Role should be numeric\n");
+		printf("\nRole should be numeric\n");
 		return;
 	}
 
@@ -567,11 +567,11 @@ void displayTopKPlayers()
 	}
 	
 	int numberOfPlayers = 0;
-	printf("Enter number of players: ");
+	printf("\nEnter number of players: ");
 	
 	if(scanf("%d", &numberOfPlayers) != 1)
 	{
-		printf("Number of Players should be numeric\n");
+		printf("\nNumber of Players should be numeric\n");
 		return;
 	}
 	
