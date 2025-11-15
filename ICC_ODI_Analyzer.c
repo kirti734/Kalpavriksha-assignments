@@ -14,6 +14,8 @@
 #define ROLE_NAME_LENGTH 20
 #define TEAM_NAME_LENGTH 20
 
+#define MAX_PLAYER_OF_ALL_TEAM_SPECIFIC_ROLE 1000
+
 struct playerNode
 {
 	int playerId;
@@ -95,6 +97,17 @@ void initializeTeams()
 	{
 		root = insertTeam(root, index + 1, teams[index]);
 	}
+}
+
+void printTeams()
+{
+	int index = 0;
+	printf("(");
+	for(index = 0; index < teamCount; index++)
+	{
+		printf("%d -- %s\n", (index + 1), teams[index]);
+	}
+	printf(") :");
 }
 
 float calculatePerformanceIndex(struct playerNode* newPlayer)
@@ -282,11 +295,13 @@ struct teamNode* searchTeamById(struct teamNode* root, int teamId)
 
 void addNewPlayer()
 {
-	printf("\nEnter Team ID to add player: ");
+	printf("\nEnter Team ID to add player\n");
+	printTeams();
 	int teamId = 0;
 	
 	if(scanf("%d", &teamId) != 1)
 	{
+		while(getchar() == '\n');
 		printf("\nTeam Id should be numeric\n");
 		return;
 	}
@@ -314,6 +329,7 @@ void addNewPlayer()
 	
 	if(scanf("%d", &playerId) != 1)
 	{
+		while (getchar() == '\n');
 		printf("\nPlayer Id should be numeric\n");
 		return;
 	}
@@ -323,10 +339,7 @@ void addNewPlayer()
 		printf("\nPlayer Id should be in between 1 and 1500\n");
 		return;
 	}
-	
-	while(getchar() != '\n');
-	
-	
+
 	char playerName[NAME_LENGTH];
 	printf("\nName: ");
 	
@@ -340,6 +353,7 @@ void addNewPlayer()
 	
 	if(scanf("%d", &playerRoleNumber) != 1)
 	{
+		while (getchar() == '\n');
 		printf("\nRole should be numeric\n");
 		return;
 	}
@@ -361,6 +375,7 @@ void addNewPlayer()
 	printf("\nTotal Runs: ");
 	if(scanf("%d", &totalRuns) != 1)
 	{
+		while(getchar() == '\n');
 		printf("\nTotal Runs should be numeric\n");
 		return;
 	}
@@ -370,6 +385,7 @@ void addNewPlayer()
 	
 	if(scanf("%f", &battingAverage) != 1)
 	{
+		while (getchar() == '\n');
 		printf("\nBatting Average should be numeric\n");
 		return;
 	}
@@ -380,6 +396,7 @@ void addNewPlayer()
 	
 	if(scanf("%f", &strikeRate) != 1)
 	{
+		while (getchar() == '\n');
 		printf("\nStrike Rate should be numeric\n");
 		return;
 	}
@@ -389,6 +406,7 @@ void addNewPlayer()
 	
 	if(scanf("%d", &wickets) != 1)
 	{
+		while (getchar() == '\n');
 		printf("\nWickets should be numeric\n");
 		return;
 	}
@@ -398,20 +416,24 @@ void addNewPlayer()
 	
 	if(scanf("%f", &economyRate) != 1)
 	{
+		while (getchar() == '\n');
 		printf("\nEconomy Rate should be numeric\n");
 		return;
 	}
 	
 	addPlayer(playerId, playerName, teamName, playerRole, totalRuns, battingAverage, strikeRate, wickets, economyRate);
+	printf("\nNew Player added\n");
 }
 
 void displayPlayersOfteam()
 {
-	printf("\nEnter Team ID: ");
+	printf("\nEnter Team ID\n");
+	printTeams();
 	int teamId = 0;
 	
 	if(scanf("%d", &teamId) != 1)
 	{
+		while (getchar() == '\n');
 		printf("\nTeam Id should be numeric\n");
 		return;
 	}
@@ -433,7 +455,7 @@ void displayPlayersOfteam()
 	printf("\nPlayers of Team %s:\n",team -> teamName);
 	
 	printf("\n============================================================================================================\n\n");
-	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n");
+	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n\n");
 	printf("\n============================================================================================================\n\n");
 	
 	struct playerNode *temp = team -> batters;
@@ -460,7 +482,8 @@ void displayPlayersOfteam()
 		temp = temp -> next;
 	}
 	
-	printf("\nTotal Players: %d\n",team -> totalPlayers);		
+	printf("\nTotal Players: %d\n",team -> totalPlayers);	
+	printf("\nAverage Batting Strike Rate: %0.2f\n", team -> averageBattingStrikeRate);	
 }
 
 int compareAverageBattingStrikeRate(const void* a, const void* b)
@@ -509,24 +532,26 @@ void printTeamDescendingOrder(struct teamNode* root)
 	printf("\nTeams Sorted by Average Batting Strike Rate\n\n");
 	
 	printf("\n========================================================================\n\n");
-	printf("ID   Team Name   AvgBatSR   Total Players\n");
+	printf("ID   Team Name   AvgBatSR   Total Players\n\n");
 	printf("\n========================================================================\n\n");
 	
 	
 	for(index = 0; index < teamCount; index++)
 	{
-		printf("%d  %s           %0.2f  %d\n", (index + 1), teamArray[index] -> teamName, teamArray[index] -> averageBattingStrikeRate, teamArray[index] -> totalPlayers);
+		printf("%d  %s %0.2f  %d\n", (index + 1), teamArray[index] -> teamName, teamArray[index] -> averageBattingStrikeRate, teamArray[index] -> totalPlayers);
 	}
 	printf("\n========================================================================\n\n");
 }
 
 void displayTopKPlayers()
 {
-	printf("\nEnter Team ID: ");
+	printf("\nEnter Team ID\n");
+	printTeams();
 	int teamId = 0;
 	
 	if(scanf("%d", &teamId) != 1)
 	{
+		while (getchar() == '\n');
 		printf("\nTeam Id should be numeric\n");
 		return;
 	}
@@ -546,6 +571,7 @@ void displayTopKPlayers()
 	printf("\nRole (1-Batsman, 2-Bowler, 3-All-rounder): ");
 	if(scanf("%d", &playerRoleNumber) != 1)
 	{
+		while (getchar() == '\n');
 		printf("\nRole should be numeric\n");
 		return;
 	}
@@ -571,6 +597,7 @@ void displayTopKPlayers()
 	
 	if(scanf("%d", &numberOfPlayers) != 1)
 	{
+		while (getchar() == '\n');
 		printf("\nNumber of Players should be numeric\n");
 		return;
 	}
@@ -578,7 +605,7 @@ void displayTopKPlayers()
 	printf("\nTop %d %s of Team %s:\n\n", numberOfPlayers, playerRole, team -> teamName);
 	
 	printf("\n=========================================================================================================\n\n");
-	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n");
+	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n\n");
 	printf("\n=========================================================================================================\n\n");
 	
 	while (temp != NULL && numberOfPlayers > 0)
@@ -589,39 +616,53 @@ void displayTopKPlayers()
 	}
 }
 
-void displayPlayers(struct teamNode* root, const char* playerRole)
+void collectPlayersSpecificRole(struct teamNode* root, struct playerNode** playerArray, int playerRoleNumber, int* index)
 {
 	if(root == NULL)
 	{
 		return;
 	}
+	collectPlayersSpecificRole(root -> left, playerArray, playerRoleNumber, index);
 	
-	displayPlayers(root -> left, playerRole);
+	struct playerNode* head = NULL;
 	
-	struct playerNode *temp = NULL;
-	
-	if (strcmp(playerRole, "Batsman") == 0)
+	if(playerRoleNumber == 1)
 	{
-		temp = root -> batters;
+		head = root -> batters;
 	}
-	else if(strcmp(playerRole, "Bowler") == 0)
+	else if(playerRoleNumber == 2)
 	{
-		temp = root -> bowlers;
+		head = root -> bowlers;
 	}
 	else
 	{
-		temp = root -> allRounders;
+		head = root -> allRounders;
 	}
 	
-	struct playerNode* playerHead = temp;
-	
-	while (playerHead != NULL)
+	while(head != NULL)
 	{
-		printf("\n%d %s %s %d %0.2f %0.2f %d %0.2f %0.2f\n", playerHead -> playerId, playerHead -> playerName, playerHead -> playerRole, playerHead -> totalRuns, playerHead -> battingAverage, playerHead -> strikeRate, playerHead -> wickets, playerHead -> economyRate, playerHead -> performanceIndex);
-		playerHead = playerHead -> next;
+		playerArray[(*index)++] = head;
+		head = head -> next;
 	}
 	
-	displayPlayers(root -> right, playerRole);	
+	collectPlayersSpecificRole(root -> right, playerArray, playerRoleNumber, index);
+}
+
+int comparePerformanceIndex(const void* a, const void* b)
+{
+	const struct playerNode* playerA = *(const struct playerNode**)a;
+	const struct playerNode* playerB = *(const struct playerNode**)b;
+	
+	if(playerA->performanceIndex < playerB -> performanceIndex)
+	{
+		return 1;
+	}
+	else if(playerA -> performanceIndex > playerB -> performanceIndex)
+	{
+		return -1;
+	}
+	
+	return 0;
 }
 
 void displayPlayersSpecificRole()
@@ -632,9 +673,15 @@ void displayPlayersSpecificRole()
 	printf("\nRole (1-Batsman, 2-Bowler, 3-All-rounder): ");
 	if(scanf("%d", &playerRoleNumber) != 1)
 	{
+		while (getchar() == '\n');
 		printf("\nRole should be numeric\n");
 		return;
 	}
+	int countNumberOfplayers = 0;
+	struct playerNode* playerArray[MAX_PLAYER_OF_ALL_TEAM_SPECIFIC_ROLE];
+	
+	collectPlayersSpecificRole(root,playerArray,playerRoleNumber,&countNumberOfplayers);
+	qsort(playerArray, countNumberOfplayers, sizeof(struct playerNode*), comparePerformanceIndex);
 
 	if(playerRoleNumber == 1)
 	{
@@ -652,9 +699,15 @@ void displayPlayersSpecificRole()
 	printf("\n%s of all teams: \n", playerRole);
 	
 	printf("\n=========================================================================================================\n\n");
-	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n");
+	printf("ID Name Team Role Runs Avg SR Wkts ER Perf.Index\n");
 	printf("\n=========================================================================================================\n\n");
-	displayPlayers(root ,playerRole);
+	int index = 0;
+	
+	for(index = 0; index < countNumberOfplayers; index++)
+	{
+		printf("\n%d %s %s %s %d %0.2f %0.2f %d %0.2f %0.2f\n",playerArray[index]->playerId, playerArray[index]->playerName,playerArray[index]->teamName, playerArray[index]->playerRole, playerArray[index]->totalRuns, playerArray[index]->battingAverage, playerArray[index]->strikeRate, playerArray[index]->wickets, playerArray[index]->economyRate, playerArray[index]->performanceIndex);
+	}
+	printf("\n========================================================================\n\n");
 }
 
 void freePlayers(struct playerNode* head)
@@ -668,7 +721,7 @@ void freePlayers(struct playerNode* head)
     }
 }
 
-void freeTeams()
+void freeTeams(struct teamNode* root)
 {
     if (root == NULL)
     {
@@ -705,8 +758,16 @@ int main()
 		printf("\n 5. Display all Players of specific role Access All Teams by performance index \n");
 		printf("\n 6. Exit \n");
 		printf("\nEnter your choice: ");
-		scanf("%d", &choice);
+		if (scanf("%d", &choice) != 1) 
+		{
+		    printf("\nInvalid input\n");
+		    while(getchar()!='\n'); 
+		    continue;
+		}
 		
+		while(getchar()!='\n');  
+
+
 		switch(choice)
 		{
 			case 1:
@@ -730,11 +791,12 @@ int main()
 				break;
 				
 			case 6:
-				freeTeams();
+				freeTeams(root);
+				printf("Memory is free\n");
 				return 0;
-				
+			
 			default:
-				printf("\nInvalid Choice! Try Again\n");
+				printf("Invalid Choice! Please Try Again\n");				
 		}
 	}
 	return 0;
