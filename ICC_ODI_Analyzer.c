@@ -16,6 +16,8 @@
 
 #define MAX_PLAYER_OF_ALL_TEAM_SPECIFIC_ROLE 1000
 
+enum Role {BATSMAN = 1, BOWLER = 2, ALLROUNDER = 3};
+
 struct playerNode
 {
 	int playerId;
@@ -116,7 +118,7 @@ float calculatePerformanceIndex(struct playerNode* newPlayer)
 	{
 		return ((newPlayer -> battingAverage * newPlayer -> strikeRate) / 100.00);
 	}
-	else if(strcmp(newPlayer -> playerRole, "Bowlers") == 0)
+	else if(strcmp(newPlayer -> playerRole, "Bowler") == 0)
 	{
 		return ((newPlayer -> wickets * 2.00) + (100.00 - newPlayer -> economyRate));
 	}
@@ -293,6 +295,18 @@ struct teamNode* searchTeamById(struct teamNode* root, int teamId)
 	return searchTeamById(root -> right, teamId);
 } 
 
+const char* findRole(enum Role role)
+{
+	switch(role)
+	{
+		case BATSMAN:
+			return "Batsman";
+		case BOWLER:
+			return  "Bowler";
+		case ALLROUNDER:
+			return "All-rounder";
+	}
+}
 void addNewPlayer()
 {
 	printf("\nEnter Team ID to add player\n");
@@ -301,16 +315,18 @@ void addNewPlayer()
 	
 	if(scanf("%d", &teamId) != 1)
 	{
-		while(getchar() == '\n');
+		while(getchar() != '\n');
 		printf("\nTeam Id should be numeric\n");
 		return;
 	}
+	while(getchar()!='\n');  
 	
 	if(teamId < MIN_ID || teamId > MAX_ID)
 	{
 		printf("\nTeam Id should be in between 1 and 1500\n");
 		return;
 	}
+	
 	
 	char teamName[TEAM_NAME_LENGTH];
 	struct teamNode* team = searchTeamById(root, teamId);
@@ -329,22 +345,22 @@ void addNewPlayer()
 	
 	if(scanf("%d", &playerId) != 1)
 	{
-		while (getchar() == '\n');
+		while (getchar() != '\n');
 		printf("\nPlayer Id should be numeric\n");
 		return;
 	}
+	while(getchar()!='\n');  
 	
 	if(playerId < MIN_ID || playerId > MAX_ID)
 	{
 		printf("\nPlayer Id should be in between 1 and 1500\n");
 		return;
 	}
+	
 
 	char playerName[NAME_LENGTH];
 	printf("\nName: ");
-	
-	fgets(playerName, NAME_LENGTH, stdin);
-	playerName[strcspn(playerName, "\n")] = '\0';
+	scanf("%49s", playerName);
 	
 		
 	char playerRole[ROLE_NAME_LENGTH];
@@ -353,42 +369,42 @@ void addNewPlayer()
 	
 	if(scanf("%d", &playerRoleNumber) != 1)
 	{
-		while (getchar() == '\n');
+		while (getchar() != '\n');
 		printf("\nRole should be numeric\n");
 		return;
 	}
+	while(getchar()!='\n'); 
 	
-	if(playerRoleNumber == 1)
+	if(playerRoleNumber < 1 || playerRoleNumber > 3)
 	{
-		strcpy(playerRole, "Batsman");
+		printf("\nRole should be in the range of 1 to 3\n");
+		return;
 	}
-	else if(playerRoleNumber == 2)
-	{
-		strcpy(playerRole, "Bowler");
-	}
-	else
-	{
-		strcpy(playerRole, "All-rounder");
-	}
-	
+	 
+	strcpy(playerRole, findRole(playerRoleNumber));
+
+
 	int totalRuns = 0;
 	printf("\nTotal Runs: ");
 	if(scanf("%d", &totalRuns) != 1)
 	{
-		while(getchar() == '\n');
+		while(getchar() != '\n');
 		printf("\nTotal Runs should be numeric\n");
 		return;
 	}
+	while(getchar()!='\n');
+	
 	
 	float battingAverage = 0.00;
 	printf("\nBatting Average: ");
 	
 	if(scanf("%f", &battingAverage) != 1)
 	{
-		while (getchar() == '\n');
+		while (getchar() != '\n');
 		printf("\nBatting Average should be numeric\n");
 		return;
 	}
+	while(getchar()!='\n');
 	
 	
 	float strikeRate = 0.00;
@@ -396,30 +412,36 @@ void addNewPlayer()
 	
 	if(scanf("%f", &strikeRate) != 1)
 	{
-		while (getchar() == '\n');
+		while (getchar() != '\n');
 		printf("\nStrike Rate should be numeric\n");
 		return;
 	}
+	while(getchar()!='\n');
+	
 	
 	int wickets = 0;
 	printf("\nWickets: ");
 	
 	if(scanf("%d", &wickets) != 1)
 	{
-		while (getchar() == '\n');
+		while (getchar() != '\n');
 		printf("\nWickets should be numeric\n");
 		return;
 	}
+	while(getchar()!='\n');
+	
 	
 	float economyRate = 0.00;
 	printf("\nEconomy Rate: ");
 	
 	if(scanf("%f", &economyRate) != 1)
 	{
-		while (getchar() == '\n');
+		while (getchar() != '\n');
 		printf("\nEconomy Rate should be numeric\n");
 		return;
 	}
+	while(getchar()!='\n');
+	
 	
 	addPlayer(playerId, playerName, teamName, playerRole, totalRuns, battingAverage, strikeRate, wickets, economyRate);
 	printf("\nNew Player added\n");
@@ -433,17 +455,17 @@ void displayPlayersOfteam()
 	
 	if(scanf("%d", &teamId) != 1)
 	{
-		while (getchar() == '\n');
+		while (getchar() != '\n');
 		printf("\nTeam Id should be numeric\n");
 		return;
 	}
+	while(getchar()!='\n');
 	
 	if(teamId < MIN_ID || teamId > MAX_ID)
 	{
 		printf("\nTeam Id should be in between 1 and 1500\n");
 		return;
 	}
-	
 	
 	struct teamNode* team = searchTeamById(root, teamId);
 	if(team == NULL)
@@ -551,10 +573,11 @@ void displayTopKPlayers()
 	
 	if(scanf("%d", &teamId) != 1)
 	{
-		while (getchar() == '\n');
+		while (getchar() != '\n');
 		printf("\nTeam Id should be numeric\n");
 		return;
 	}
+	while(getchar()!='\n');
 	
 	if(teamId < MIN_ID || teamId > MAX_ID)
 	{
@@ -564,31 +587,34 @@ void displayTopKPlayers()
 	
 	struct teamNode* team = searchTeamById(root, teamId);
 	
-	char playerRole[ROLE_NAME_LENGTH];
 	int playerRoleNumber = 0;
 	struct playerNode *temp;
 	
 	printf("\nRole (1-Batsman, 2-Bowler, 3-All-rounder): ");
 	if(scanf("%d", &playerRoleNumber) != 1)
 	{
-		while (getchar() == '\n');
+		while (getchar() != '\n');
 		printf("\nRole should be numeric\n");
 		return;
 	}
-
-	if(playerRoleNumber == 1)
+	while(getchar()!='\n');
+	
+	if(playerRoleNumber < 1 || playerRoleNumber > 3)
 	{
-		strcpy(playerRole, "Batsman");
+		printf("\nRole should be in the range of 1 to 3\n");
+		return;
+	}
+	
+	if(playerRoleNumber == BATSMAN)
+	{
 		temp = team -> batters;
 	}
-	else if(playerRoleNumber == 2)
+	else if(playerRoleNumber == BOWLER)
 	{
-		strcpy(playerRole, "Bowler");
 		temp = team -> bowlers;
 	}
 	else
 	{
-		strcpy(playerRole, "All-rounder");
 		temp = team -> allRounders;
 	}
 	
@@ -597,12 +623,12 @@ void displayTopKPlayers()
 	
 	if(scanf("%d", &numberOfPlayers) != 1)
 	{
-		while (getchar() == '\n');
+		while (getchar() != '\n');
 		printf("\nNumber of Players should be numeric\n");
 		return;
 	}
 	
-	printf("\nTop %d %s of Team %s:\n\n", numberOfPlayers, playerRole, team -> teamName);
+	printf("\nTop %d %s of Team %s:\n\n", numberOfPlayers, findRole(playerRoleNumber), team -> teamName);
 	
 	printf("\n=========================================================================================================\n\n");
 	printf("ID Name Role Runs Avg SR Wkts ER Perf.Index\n\n");
@@ -626,11 +652,11 @@ void collectPlayersSpecificRole(struct teamNode* root, struct playerNode** playe
 	
 	struct playerNode* head = NULL;
 	
-	if(playerRoleNumber == 1)
+	if(playerRoleNumber == BATSMAN)
 	{
 		head = root -> batters;
 	}
-	else if(playerRoleNumber == 2)
+	else if(playerRoleNumber == BOWLER)
 	{
 		head = root -> bowlers;
 	}
@@ -667,36 +693,31 @@ int comparePerformanceIndex(const void* a, const void* b)
 
 void displayPlayersSpecificRole()
 {
-	char playerRole[ROLE_NAME_LENGTH];
 	int playerRoleNumber = 0;
 	
 	printf("\nRole (1-Batsman, 2-Bowler, 3-All-rounder): ");
 	if(scanf("%d", &playerRoleNumber) != 1)
 	{
-		while (getchar() == '\n');
+		while (getchar() != '\n');
 		printf("\nRole should be numeric\n");
 		return;
 	}
+	while(getchar()!='\n');
+	
+	if(playerRoleNumber < 1 || playerRoleNumber > 3)
+	{
+		printf("\nRole should be in the range of 1 to 3\n");
+		return;
+	}
+	
 	int countNumberOfplayers = 0;
 	struct playerNode* playerArray[MAX_PLAYER_OF_ALL_TEAM_SPECIFIC_ROLE];
 	
 	collectPlayersSpecificRole(root,playerArray,playerRoleNumber,&countNumberOfplayers);
 	qsort(playerArray, countNumberOfplayers, sizeof(struct playerNode*), comparePerformanceIndex);
 
-	if(playerRoleNumber == 1)
-	{
-		strcpy(playerRole, "Batsman");
-	}
-	else if(playerRoleNumber == 2)
-	{
-		strcpy(playerRole, "Bowler");
-	}
-	else
-	{
-		strcpy(playerRole, "All-rounder");
-	}
 	
-	printf("\n%s of all teams: \n", playerRole);
+	printf("\n%s of all teams: \n", findRole(playerRoleNumber));
 	
 	printf("\n=========================================================================================================\n\n");
 	printf("ID Name Team Role Runs Avg SR Wkts ER Perf.Index\n");
@@ -761,10 +782,9 @@ int main()
 		if (scanf("%d", &choice) != 1) 
 		{
 		    printf("\nInvalid input\n");
-		    while(getchar()!='\n'); 
+		    while(getchar() != '\n'); 
 		    continue;
 		}
-		
 		while(getchar()!='\n');  
 
 
