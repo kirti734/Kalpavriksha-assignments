@@ -307,6 +307,61 @@ const char* findRole(enum Role role)
 			return "All-rounder";
 	}
 }
+
+int checkUniqueId(struct teamNode* root, int playerId)
+{
+	if (root == NULL)
+	{
+		return 0;
+	}
+	
+	if (checkUniqueId(root -> left, playerId))
+	{
+		return 1;
+	}
+	
+	struct playerNode* temp = root -> batters;
+	
+	while (temp != NULL)
+	{
+		if (temp -> playerId == playerId)
+		{
+			return 1;
+		}
+		temp = temp -> next;
+	}
+	
+	temp = root -> bowlers;
+	
+	while (temp != NULL)
+	{
+		if (temp -> playerId == playerId)
+		{
+			return 1;
+		}
+		temp = temp -> next;
+	}
+	
+	temp = root -> allRounders;
+	
+	while (temp != NULL)
+	{
+		if (temp -> playerId == playerId)
+		{
+			return 1;
+		}
+		temp = temp -> next;
+	}
+	
+	if (checkUniqueId(root -> right, playerId))
+	{
+		return 1;
+	}
+	
+	return 0;
+
+}
+
 void addNewPlayer()
 {
 	printf("\nEnter Team ID to add player\n");
@@ -354,6 +409,12 @@ void addNewPlayer()
 	if(playerId < MIN_ID || playerId > MAX_ID)
 	{
 		printf("\nPlayer Id should be in between 1 and 1500\n");
+		return;
+	}
+	
+	if(checkUniqueId(root, playerId))
+	{
+		printf("\nEnter the Unique Player id\n");
 		return;
 	}
 	
