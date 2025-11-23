@@ -252,7 +252,18 @@ void insertPut()
 	
 	char value[VALUE_LENGTH];
 	printf("Enter the value: ");
-	scanf("%49s", value);
+	if(fgets(value, VALUE_LENGTH, stdin) == NULL)
+	{
+		printf("\nFailed to read value\n");
+		return;
+	}
+	value[strcspn(value, "\n")] = '\0';
+	
+	if(strlen(value) == 0)
+	{
+		printf("\nPlease enter the value\n");
+		return;
+	}
 	
 	put(key, value);
 }
