@@ -238,7 +238,7 @@ void put(int key, const char* value)
 	}
 }
 
-void insertPut()
+void getUserInputForPut()
 {
 	int key = 0;
 	printf("\nEnter the key: ");
@@ -285,7 +285,7 @@ char* get(int key)
 	return "NULL"; 
 }
 
-void insertGet()
+void getUserInputForGet()
 {
 	int key = 0;
 	printf("\nEnter the key: ");
@@ -358,11 +358,11 @@ int main()
 		switch (choice)
 		{
 			case 1:
-				insertPut();
+				getUserInputForPut();
 				break;
 			
 			case 2:
-				insertGet();
+				getUserInputForGet();
 				break;
 			
 			case 3:
