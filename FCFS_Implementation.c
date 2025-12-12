@@ -563,6 +563,8 @@ void processScheduling()
 		}
 		
 		handleIOprocess();
+
+		sleep(1);
 		
 		currentTime++;
 		
