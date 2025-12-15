@@ -75,7 +75,7 @@ void initialize()
 	initializeQueue(&waitingQueue);
 	initializeQueue(&terminatedQueue);
 	
-	pcbTable = (struct PCB**) malloc (HASHMAP_SIZE * sizeof(struct PCB*));
+	pcbTable = (struct PCB**) calloc (HASHMAP_SIZE, sizeof(struct PCB*));
 	
 	if (pcbTable == NULL)
 	{
@@ -420,12 +420,16 @@ void processKillEventForCurrentTime()
 			{
 				process -> isKilled = 1;
 				process -> completionTime = currentTime;
-				process -> state = TERMINATED;
 				
+				if(process -> state == READY || process -> state == WAITING)
+				{
+					process -> state = TERMINATED;
+					enqueue(&terminatedQueue, process);
+				}
+			
 				removeFromQueueByProcessId(&readyQueue, process -> processId);
 				removeFromQueueByProcessId(&waitingQueue, process -> processId);
 				
-				enqueue(&terminatedQueue, process);
 			}
 			
 			struct KillEvent *toFree = current;
@@ -474,7 +478,6 @@ void handleIOprocess()
 			if(!process -> isKilled && process -> state != TERMINATED)
 			{
 				process -> state = READY;
-				removeFromQueueByProcessId(&readyQueue, process -> processId);
 			    enqueue(&readyQueue, process);	
 			}		
 			
@@ -522,20 +525,26 @@ void processScheduling()
 		
 		if (runningProcess != NULL && runningProcess -> isKilled)
 		{
+			runningProcess -> state = TERMINATED;
+			enqueue(&terminatedQueue, runningProcess);
 			runningProcess = NULL;
 		}
 		
 		if (runningProcess == NULL)
 		{
 			runningProcess = dequeue(&readyQueue);
-			if (runningProcess != NULL && !runningProcess -> isKilled)
-            {
-                runningProcess -> state = RUNNING;
-            }
-            else if (runningProcess != NULL && runningProcess -> isKilled)
-            {
-                runningProcess = NULL;
-            }
+			
+			if (runningProcess != NULL)
+			{
+				if (!runningProcess -> isKilled)
+	            {
+	                runningProcess -> state = RUNNING;
+	            }
+	            else if (runningProcess -> isKilled)
+	            {
+	                runningProcess = NULL;
+	            }
+			}
 		}
 		
 		if (runningProcess != NULL)
@@ -545,8 +554,6 @@ void processScheduling()
 			
 			if (runningProcess -> ioStartTime > 0 && runningProcess -> executedTime == runningProcess -> ioStartTime && runningProcess -> ioDuration > 0)
 			{
-				removeFromQueueByProcessId(&readyQueue, runningProcess -> processId);
-
 				runningProcess -> state = WAITING;
 				runningProcess -> remainingIOTime = runningProcess -> ioDuration;
 				
@@ -563,8 +570,6 @@ void processScheduling()
 		}
 		
 		handleIOprocess();
-
-		sleep(1);
 		
 		currentTime++;
 		
