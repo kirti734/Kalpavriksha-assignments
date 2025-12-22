@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 
 #define PORT 8080
-#define DATABASE_FILE "accountDB.txt"
+#define DATABASE_FILE "resource/accountDB.txt"
 #define MAX_LENGTH_OF_LINE 1000
 #define MAX_NAME_LENGTH 100
 
