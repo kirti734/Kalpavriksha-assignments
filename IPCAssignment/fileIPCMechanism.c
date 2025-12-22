@@ -80,7 +80,7 @@ int main()
 
         for (int index = 0; index < numberOfElements; index++)
         {
-            fscanf(filePointer, "%d ", &arrayOfElements[index]);
+            fscanf(filePointer, "%d ", (arrayOfElements + index));
         }
 
         fclose(filePointer);
@@ -88,6 +88,13 @@ int main()
         qsort(arrayOfElements, numberOfElements, sizeof(int), compare);
 
         filePointer = fopen("arrayDataFile.txt", "w");
+
+        if (filePointer == NULL)
+        {
+            printf("File Pointer is failed\n");
+            return 1;
+        }
+        
         for (int index = 0; index < numberOfElements; index++)
         {
             fprintf(filePointer, "%d ", *(arrayOfElements + index));
@@ -109,7 +116,7 @@ int main()
 
         for (int index = 0; index < numberOfElements; index++)
         {
-            fscanf(filePointer, "%d ", &arrayOfElements[index]);
+            fscanf(filePointer, "%d ", (arrayOfElements + index));
         }
 
         fclose(filePointer);
@@ -125,3 +132,5 @@ int main()
 
     return 0;
 }
+
+
