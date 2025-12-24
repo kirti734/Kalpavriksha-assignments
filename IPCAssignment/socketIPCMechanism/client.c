@@ -22,6 +22,12 @@ int main()
 
     struct ClientRequest *request = malloc (sizeof(struct ClientRequest));
 
+    if (request == NULL)
+    {
+        printf("Mmoery Allocation is failed\n");
+        return 1;
+    }
+
     serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 
     serverAddress.sin_family = AF_INET;
