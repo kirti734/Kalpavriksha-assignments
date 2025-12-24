@@ -41,14 +41,14 @@ int main()
         return 1;
     }
 
-    int *sharedMmoryPointer = (int*) shmat (sharedMemoryId, NULL, 0);
+    int *sharedMemoryPointer = (int*) shmat (sharedMemoryId, NULL, 0);
 
     printf("Enter the elements for the array\n");
 
     for (int index = 0; index < numberOfElements; index++)
     {
         printf("Enter the element %d : ", (index + 1));
-        if (scanf("%d", (sharedMmoryPointer + index)) != 1)
+        if (scanf("%d", (sharedMemoryPointer + index)) != 1)
         {
             printf("Element should be integer\n");
             while (getchar() != '\n');
@@ -61,15 +61,15 @@ int main()
 
     for (int index = 0; index < numberOfElements; index++)
     {
-        printf("%d ", *(sharedMmoryPointer + index));
+        printf("%d ", *(sharedMemoryPointer + index));
     }
     printf("\n");
 
     if (fork() == 0)
     {
-        qsort(sharedMmoryPointer, numberOfElements, sizeof(int), compare);
+        qsort(sharedMemoryPointer, numberOfElements, sizeof(int), compare);
 
-        shmdt(sharedMmoryPointer);
+        shmdt(sharedMemoryPointer);
 
         exit(0);
     }
@@ -81,11 +81,11 @@ int main()
 
         for (int index = 0; index < numberOfElements; index++)
         {
-            printf("%d ", *(sharedMmoryPointer + index));
+            printf("%d ", *(sharedMemoryPointer + index));
         }
         printf("\n");
         
-        shmdt(sharedMmoryPointer);
+        shmdt(sharedMemoryPointer);
 
         shmctl(sharedMemoryId, IPC_RMID, NULL);
     }
