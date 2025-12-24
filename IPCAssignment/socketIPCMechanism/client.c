@@ -5,6 +5,7 @@
 #include <arpa/inet.h>
 
 #define PORT 8080
+#define IP_ADDRESS "127.0.0.1"
 
 struct ClientRequest
 {
@@ -34,7 +35,7 @@ int main()
 
     serverAddress.sin_port = htons(PORT);
 
-    serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
+    serverAddress.sin_addr.s_addr = inet_addr(IP_ADDRESS);
 
     if (connect(serverSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0)
     {
