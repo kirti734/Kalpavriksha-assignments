@@ -33,7 +33,7 @@ int main()
     if (arrayOfElements == NULL)
     {    
         printf("\nArray Of Elements memeory is failed\n");
-        return 1
+        return 1;
     }
 
     printf("Enter the elements for the array\n");
