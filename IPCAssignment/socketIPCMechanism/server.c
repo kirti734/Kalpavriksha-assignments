@@ -25,10 +25,16 @@ int getLastBalance(int accountNumber)
 
     if (filePointer == NULL)
     {
-        return 0;
+        return 1;
     }
 
     char *tempLine = malloc (MAX_LENGTH_OF_LINE * sizeof(char));
+
+    if (tempLine == NULL)
+    {
+        printf("Temp Line memory pointer is failed\n");
+        return 1;
+    }
 
     int tempBalance = 0;
     int accountBalance = 0;
@@ -71,6 +77,13 @@ void* handleClientRequest(void *arg)
     free(arg);
 
     struct ClientRequest *request = malloc (sizeof(struct ClientRequest));
+
+    if (request == NULL)
+    {
+        printf("Mmoery Allocation is failed\n");
+        return NULL;
+    }
+
     int currentBalance = 0;
 
     while (1)
@@ -141,6 +154,12 @@ int main()
     while (1)
     {
         int *clientSocket = malloc (sizeof(int));
+
+        if (clientSocket == NULL)
+        {
+            printf("Mmoery Allocation is failed\n");
+            return 1;
+        }
 
         *clientSocket = accept(serverSocket, NULL, NULL);
 
