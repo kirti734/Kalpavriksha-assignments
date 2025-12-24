@@ -31,6 +31,12 @@ int main()
 
     arrayOfElements = (int*) malloc (numberOfElements * sizeof(int));
 
+    if (arrayOfElements == NULL)
+    {    
+        printf("\nArray Of Elements memeory is failed to allocate\n");
+        return 1;
+    }
+
     printf("Enter the elements for the array\n");
 
     for (int index = 0; index < numberOfElements; index++)
